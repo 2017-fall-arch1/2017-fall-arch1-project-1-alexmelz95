@@ -4,35 +4,24 @@
 #include <string.h>
 #include "employee.h"
 
-Employee* root;
-
-Employee* NewEmployeeList(char* name){
-  root = (Employee*)malloc(sizeof(Employee));
+struct Employee *NewEmployeeList(char *name){
+  struct Employee *root = (struct Employee *)malloc(sizeof(struct Employee));
   root->name = name;
-  root->left = newEmployee->right = NULL;
+  root->left = root->right = NULL;
   return root;
 };
 
-void insert(char* name){
-  root = insertEmployee(root, name);
-}
-
-Employee* insertEmployee(Employee* tempRoot, char* name){
-  if(tempRoot == null){
-    tempRoot = (Employee*)malloc(sizeof(Employee));
-    tempRoot->name = name;
+struct Employee *insertEmployee(struct Employee *root, char *name){
+  if(root == NULL){
+    return NewEmployeeList(name);
   }
-  else if(strcmp(name, tempRoot->name) < 0){
-    tempRoot->left = insertEmployee(tempRoot->left, name);
+  else if(strcmp(name, root->name) < 0){
+    root->left = insertEmployee(root->left, name);
   }
   else{
-    tempRoot->right = insertEmployee(tempRoot->, name);
+    root->right = insertEmployee(root->right, name);
   }
-  return tempRoot;
-}
-
-void delete(char* name){
-  root = deleteEmployee(root, name);
+  return root;
 }
 
 /*
@@ -40,45 +29,45 @@ Algorithm for deletion taken from GeeksforGeeks and implemented
 in C by me
  */
 
-Employee* deleteEmployee(Employee* tempRoot, char* name){
-  if(tempRoot == NULL){
-    return tempRoot;
+struct Employee *deleteEmployee(struct Employee *root, char *name){
+  if(root == NULL){
+    return root;
   }
 
-  if(strcmp(name, tempRoot->name) < 0){
-    tempRoot->left = deleteEmployee(tempRoot->left, name);
+  if(strcmp(name, root->name) < 0){
+    root->left = deleteEmployee(root->left, name);
   }
-  else if(strcmp(name, tempRoot->name) > 0){
-    tempRoot->right = deleteEmployee(tempRoot->right, name);
+  else if(strcmp(name, root->name) > 0){
+    root->right = deleteEmployee(root->right, name);
   }
   else{
-    if(tempRoot.right == null){
-      return tempRoot.left;
+    if(root->right == NULL){
+      return root->left;
     }
-    if(tempRoot.left == null){
-      return tempRoot.right;
+    if(root->left == NULL){
+      return root->right;
     }
     
-    tempRoot->name = inorderSuccessor(tempRoot->right);
-    tempRoot->right = deleteEmployee(tempRoot-right, tempRoot->name);
+    root->name = inorderSuccessor(root->right);
+    root->right = deleteEmployee(root->right, root->name);
   }
-  return tempRoot;
+  return root;
 }
 
-char* inorderSuccessor(Employee* tempRoot){
-  char* successor = tempRoot->name;
-  while(tempRoot->left != NULL){
-    successor = tempRoot->left->name;
-    tempRoot = tempRoot->left;
+char *inorderSuccessor(struct Employee *root){
+  char *successor = root->name;
+  while(root->left != NULL){
+    successor = root->left->name;
+    root = root->left;
   }
   return successor;
 }
 
-void printEmployees(){
+void printEmployees(struct Employee *root){
   if(root != NULL){
     printEmployees(root->left);
-    printf(root->name);
+    //Format of Print Statement taken from Geeks for Geeks
+    printf("%s \n",root->name);
     printEmployees(root->right);
   }
 }
-    
