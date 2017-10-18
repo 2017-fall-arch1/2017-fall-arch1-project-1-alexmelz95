@@ -48,10 +48,15 @@ struct Employee *deleteEmployee(struct Employee *root, char *name){
   else{
     //if node to be deleted only has one child
     if(root->right == NULL){
-      return root->left;
+      //credit to Geeks for Geeks
+      struct Employee *temp = root->left;
+      free(root);
+      return temp;
     }
     if(root->left == NULL){
-      return root->right;
+      struct Employee *temp = root->right;
+      free(root);
+      return temp;;
     }
     //if node has two children
     root->name = inorderSuccessor(root->right);
