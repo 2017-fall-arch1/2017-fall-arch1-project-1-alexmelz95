@@ -6,8 +6,17 @@
 
 //Creates a new employee root
 struct Employee *NewEmployeeList(char *name){
-  struct Employee *root = (struct Employee *)malloc(sizeof(struct Employee));
-  root->name = name;
+  int len;
+  char *name_copy;
+  struct Employee *root;
+  for(len = 0; name[len]; len++)
+    ;
+  name_copy = (char *)malloc(len+1);
+  for(len = 0; name[len]; len++)
+    name_copy[len] = name[len];
+  name_copy[len] = 0;
+  root = (struct Employee *)malloc(sizeof(struct Employee));
+  root->name = name_copy;
   root->left = root->right = NULL;
   return root;
 };
@@ -59,20 +68,20 @@ struct Employee *deleteEmployee(struct Employee *root, char *name){
       return temp;;
     }
     //if node has two children
-    root->name = inorderSuccessor(root->right);
-    root->right = deleteEmployee(root->right, root->name);
+    struct Employee *temp = findNew(root->right);
+    root->name = temp->name;
+    root->right = deleteEmployee(root->right, temp->name);
   }
   return root;
 }
 
 //used in deleteEmployees
-char *inorderSuccessor(struct Employee *root){
-  char *successor = root->name;
-  while(root->left != NULL){
-    successor = root->left->name;
-    root = root->left;
+struct Employee *findNew(struct Employee *root){
+  struct Employee *new = root;
+  while(new->left != NULL){
+    new = new->left;
   }
-  return successor;
+  return new;
 }
 
 void printEmployees(struct Employee *root){
